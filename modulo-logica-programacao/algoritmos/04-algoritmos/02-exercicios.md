@@ -35,3 +35,16 @@ INÍCIO
     Servir o café na xícara
 FIM
 ```
+
+"Como mandar um pix para mim"
+
+1 - Acessar o app do banco para ou carteira digital
+2 - Ir na area Pix
+3 - Selecionar a opção "Enviar Pix"
+4 - Inserir a minha Chave pix FORNECIDA
+5 - Informa o valor a ser enviado
+6 - confirma os meus dados
+7 - Digita a senha-chave
+8 - Autoriza a transação
+9 - Banco processa o Pix
+10 - RECEBI
