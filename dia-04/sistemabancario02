@@ -3,187 +3,215 @@ using System.Collections.Generic;
 
 namespace SistemaBancario
 {
-    class Conta
-    {
-        public string Nome { get; set; }
-        public string CPF { get; set; }
-        public string TipoConta { get; set; }
-        public double Saldo { get; set; }
-    }
-
     class App
     {
-        static List<Conta> contas = new List<Conta>();
-
-        static void Main()
+        static void Main(string[] args)
         {
-            MostrarMenuPrincipal();
-        }
+            // Cadastro inicial de Clientes
+            bool cadastrarProximoCliente = true;
+            while (cadastrarProximoCliente)
+                cadastrarProximoCliente = ContaBancaria.CadastrarNovaConta();
 
-        static void MostrarMenuPrincipal()
-        {
-            bool sair = false;
-            while (!sair)
+            // Menu de operações
+            while (true)
             {
-                Console.WriteLine("========= BANRISUL =========");
-                Console.WriteLine("[1] - Cadastrar Cliente");
-                Console.WriteLine("[2] - Listar Clientes");
-                Console.WriteLine("[3] - Acessar Conta");
-                Console.WriteLine("[4] - Sair");
-                Console.WriteLine("===========================");
-                Console.Write("Selecione: ");
-                
-                int opcaoPrincipal = Convert.ToInt32(Console.ReadLine());
-                Console.Clear();
+                Console.WriteLine("\n1 - Abrir Conta Bancaria");
+                Console.WriteLine("2 - Depositar");
+                Console.WriteLine("3 - Sacar");
+                Console.WriteLine("4 - Consultar Saldo");
+                Console.WriteLine("5 - Transferir");
+                Console.WriteLine("S - Sair");
+                Console.Write("Selecione a ação: ");
+                string opcao = Console.ReadLine().ToUpper();
 
-                switch (opcaoPrincipal)
+                if (opcao == "S")
+                    break;
+
+                switch (opcao)
                 {
-                    case 1: CadastrarCliente(); break;
-                    case 2: ListarClientes(); break;
-                    case 3: AcessarConta(); break;
-                    case 4: sair = true; break;
-                    default: Console.WriteLine("Opção inválida."); break;
+                    case "1":
+                        ContaBancaria.CadastrarNovaConta();
+
+                        break;
+                    case "2":
+                        ContaBancaria.ListarClientes();
+
+                        break;
+                    case "3":
+                        ContaBancaria.Sacar();
+
+                        break;
+                    case "4":
+                        ContaBancaria.ConsultarSaldo();
+
+                        break;
+                    case "5":
+                        ContaBancaria.Transferir();
+
+                        break;
+                    default:
+                        Console.WriteLine("\nOpção inválida.");
+
+                        break;
                 }
             }
-        }
 
-        static void CadastrarCliente()
-        {
-            Console.WriteLine("Cadastro de Cliente");
-            Console.Write("Nome completo: ");
-            string nome = Console.ReadLine();
-
-            Console.Write("CPF: ");
-            string cpf = Console.ReadLine();
-
-            int tipo;
-            do
-            {
-                Console.Write("Tipo de conta [1] Corrente | [2] Poupança: ");
-                tipo = Convert.ToInt32(Console.ReadLine());
-            }
-            while (tipo != 1 && tipo != 2);
-
-            Conta novaConta = new Conta
-            {
-                Nome = nome,
-                CPF = cpf,
-                TipoConta = tipo == 1 ? "Corrente" : "Poupança",
-                Saldo = 0
-            };
-
-            contas.Add(novaConta);
-
-            Console.WriteLine("Conta cadastrada com sucesso!");
-        }
-
-        static void ListarClientes()
-        {
-            if (contas.Count == 0)
-            {
-                Console.WriteLine("Nenhum cliente cadastrado.");
-                return;
-            }
-
-            Console.WriteLine("Clientes Cadastrados:");
-            foreach (var c in contas)
-            {
-                Console.WriteLine($"Nome: {c.Nome} | CPF: {c.CPF} | Tipo: {c.TipoConta} | Saldo: {c.Saldo:C}");
-            }
-        }
-
-        static void AcessarConta()
-        {
-            Console.Write("Informe o CPF da conta: ");
-            string cpfBusca = Console.ReadLine();
-
-            Conta conta = contas.Find(c => c.CPF == cpfBusca);
-
-            if (conta == null)
-            {
-                Console.WriteLine("Conta não encontrada!");
-                return;
-            }
-
-            if (conta.TipoConta == "Corrente")
-                MenuContaCorrente(conta);
-            else
-                MenuContaPoupanca(conta);
-        }
-
-        static void MenuContaCorrente(Conta conta)
-        {
-            int opc;
-            do
-            {
-                Console.WriteLine("===== Conta Corrente =====");
-                Console.WriteLine($"Cliente: {conta.Nome}");
-                Console.WriteLine($"Saldo: {conta.Saldo:C}");
-                Console.WriteLine("[1] Consultar Saldo");
-                Console.WriteLine("[2] Depositar");
-                Console.WriteLine("[3] Sacar");
-                Console.WriteLine("[4] Sair");
-                Console.Write("Escolha: ");
-                opc = Convert.ToInt32(Console.ReadLine());
-                Console.Clear();
-
-                switch (opc)
-                {
-                    case 1: Console.WriteLine($"Saldo atual: {conta.Saldo:C}"); break;
-                    case 2: Depositar(conta); break;
-                    case 3: Sacar(conta); break;
-                    case 4: break;
-                    default: Console.WriteLine("Opção inválida."); break;
-                }
-            }
-            while (opc != 4);
-        }
-
-        static void MenuContaPoupanca(Conta conta)
-        {
-            int opc;
-            do
-            {
-                Console.WriteLine("===== Conta Poupança =====");
-                Console.WriteLine($"Cliente: {conta.Nome}");
-                Console.WriteLine($"Saldo: {conta.Saldo:C}");
-                Console.WriteLine("[1] Consultar Saldo");
-                Console.WriteLine("[2] Depositar");
-                Console.WriteLine("[3] Sair");
-                Console.Write("Escolha: ");
-                opc = Convert.ToInt32(Console.ReadLine());
-                Console.Clear();
-
-                switch (opc)
-                {
-                    case 1: Console.WriteLine($"Saldo atual: {conta.Saldo:C}"); break;
-                    case 2: Depositar(conta); break;
-                    case 3: break;
-                    default: Console.WriteLine("Opção inválida."); break;
-                }
-            }
-            while (opc != 3);
-        }
-
-        static void Depositar(Conta conta)
-        {
-            Console.Write("Valor do depósito: ");
-            double valor = Convert.ToDouble(Console.ReadLine());
-            conta.Saldo += valor;
-            Console.WriteLine("Depósito realizado.");
-        }
-
-        static void Sacar(Conta conta)
-        {
-            Console.Write("Valor do saque: ");
-            double valor = Convert.ToDouble(Console.ReadLine());
-            if (valor > conta.Saldo)
-                Console.WriteLine("Saldo insuficiente.");
-            else
-            {
-                conta.Saldo -= valor;
-                Console.WriteLine("Saque realizado.");
-            }
+            Console.WriteLine("\nEncerrando a biblioteca...");
         }
     }
+
+    class Banco
+    {
+        static Dictionary<int, string> Cpfs = new Dictionary<int, string>();
+        static Dictionary<int, string> Nomes = new Dictionary<int, string>();
+        static Dictionary<int, int> Tipos = new Dictionary<int, int>();
+        static Dictionary<int, double> Saldos = new Dictionary<int, double>();
+
+        public static void Cadastrar(int id, string Cpf, string Nome, double Saldo, int Tipo)
+        {
+            Cpfs.Add(id, Cpf);
+            Nomes.Add(id, Nome);
+            Tipos.Add(id, Tipo);
+            Saldos.Add(id, Saldo);
+
+        }
+        public static int ObterQuantidadeCpfsUnicosCadastradas()
+        {
+            return Cpfs.Count;
+        }
+
+        public static bool Cadastrada(int id)
+        {
+            return Cpfs.ContainsKey(id);
+        }
+
+        public static string ObterCpfs(int id)
+        {
+            return Cpfs[id];
+        }
+
+        public static List<int> ObterIdsCpfsCadastradas()
+        {
+            return new List<int>(Cpfs.Keys);
+        }
+
+        public static string ObterNomeCliente(int id)
+        {
+            return Nomes[id];
+        }
+
+        public static double ObterSaldo(int id)
+        {
+            return Saldos[id];
+        }
+
+        public static int RegistrarTipos(int id)
+        {
+            return Tipos[id];
+        }
+    }
+
+    class Cliente
+    {
+        static Dictionary<int, string> Nomes = new Dictionary<int, string>();
+
+        public static void Cadastrar(int id, string nome)
+        {
+            Nomes.Add(id, nome);
+        }
+
+        public static int ObterQuantidadeClientesCadastrados()
+        {
+            return Nomes.Count;
+        }
+
+        public static bool Cadastrado(int id)
+        {
+            return Nomes.ContainsKey(id);
+        }
+
+        public static string ObterNome(int id)
+        {
+            return Nomes[id];
+        }
+
+        public static List<int> ObterIdsClientesCadastrados()
+        {
+            return new List<int>(Nomes.Keys);
+        }
+    }
+
+
+    class ContaBancaria
+    {
+        static int IdConta = 1;
+        static int IdNome = 1;
+
+        public static bool CadastrarNovaConta()
+        {
+            Console.WriteLine($"\nDigite o seu Nome {IdNome} (ou 'S' para sair do cadastro de clientes):");
+            string inputNome = Console.ReadLine();
+
+            if (inputNome.ToUpper() == "S")
+                return false;
+
+            Console.WriteLine($"Digite o seu Cpf '{inputNome}': ");
+            string inputCpf = Console.ReadLine();
+
+
+            Console.Write("Tipo de conta [1] Corrente | [2] Poupança: ");
+            string inputTipo = Console.ReadLine();
+
+            if (!int.TryParse(inputTipo, out int tipo))
+                tipo = 1;
+
+
+            Console.WriteLine($"Digite a quantidade inicial do seu saldo '{inputNome}':");
+            string inputSaldo = Console.ReadLine();
+
+            if (!int.TryParse(inputSaldo, out int saldo))
+                saldo = 0; 
+
+            Banco.Cadastrar(IdNome, inputNome, inputCpf, tipo, saldo);
+
+            IdNome++;
+
+            return true;
+        }
+        public static void ListarClientes()
+        {
+            Console.WriteLine("\nLista de Clientes:");
+
+            var ids = Banco.ObterIdsCpfsCadastradas();
+            for (int i = 0; i < ids.Count; i++)
+            {
+                int id = ids[i];
+
+                Console.WriteLine($"Nome: ({id}) {Cliente.ObterNome(id)} - Cpf: {Banco.ObterNomeCliente(id)} - Tipo: {Banco.RegistrarTipos(id)} - Saldo: {Banco.ObterSaldo(id):C}");
+            }
+        }
+
+        public static void Sacar()
+        {
+        }
+
+        public static void Depositar()
+
+        {
+        }
+
+        public static void ConsultarSaldo()
+        {
+        }
+
+        public static void Transferir()
+        {
+        }
+
+    }
+
+
+
 }
+
+
