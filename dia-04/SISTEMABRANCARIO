@@ -7,7 +7,7 @@ namespace SistemaBancario
         static void Main()
         {
             MostrarMenuPrincipal();
-            
+
         }
 
         static void MostrarMenuPrincipal()
@@ -59,14 +59,37 @@ namespace SistemaBancario
             Console.WriteLine("===============================================");
             int numCorrente = Convert.ToInt32(Console.ReadLine());
 
+            while (true)
+          {
             if (numCorrente == 1)
             {
-                Console.WriteLine("Consultando saldo....");
+                Console.WriteLine("Abrindo [1] - Consultar Saldo");
 
-            } else if (numCorrente == 2)
-            {
-                Console.WriteLine("Consultando saldo....");
             }
+            else if (numCorrente == 2)
+            {
+                Console.WriteLine("Abrindo [2] - Depositar ");
+            } 
+            else if (numCorrente == 3)
+            {
+                Console.WriteLine("Abrindo [3] - Sacar ");
+            }
+            else if (numCorrente == 4)
+            {
+                Console.WriteLine("Abrindo [4] - Transferir Dinheiro ");
+            } 
+            else if (numCorrente == 5)
+            {
+                Console.WriteLine("Saindo....");
+                Console.ReadLine();
+                break;
+                
+            } else
+            {
+                Console.WriteLine("Opção Inválida!!!");
+               
+            }
+          }
         }
 
         static void MostrarMenuClientePoupanca()
@@ -96,24 +119,26 @@ namespace SistemaBancario
 
             while (true)
             {
-            Console.WriteLine("Qual tipo de conta bancária deseja abrir?: [1] - Conta Corrente | [2] - Conta poupança ");
-            int opcConta = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("");
+                Console.WriteLine("Qual tipo de conta bancária deseja abrir?: [1] - Conta Corrente | [2] - Conta poupança ");
+                int opcConta = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("");
 
-            if (opcConta == 1)
+                if (opcConta == 1)
                 {
                     Console.WriteLine("Conta Corrente selecionada!");
                     Console.WriteLine("");
                     ContaCorrente();
                     break;
-                } else if (opcConta == 2)
+                }
+                else if (opcConta == 2)
                 {
                     Console.WriteLine("Conta Poupança selecionada!");
                     Console.WriteLine("");
                     ContaPoupanca();
                     break;
 
-                } else
+                }
+                else
                 {
                     Console.WriteLine("Opção Inválida!!!");
                 }
@@ -122,17 +147,22 @@ namespace SistemaBancario
 
         static void ContaCorrente()
         {
-           MostrarMenuClienteCorrente();
-           Console.ReadLine();
+            MostrarMenuClienteCorrente();
+            Console.ReadLine();
         }
 
         static void ListarClientes()
-        {
+        { 
+                Console.WriteLine("Lista de clientes:");
+                if (contas.Count == 0) //se o numero de contas criadas for 0 
+                {
+                    Console.WriteLine("Nenhuma conta cadastrada.");
+                }
             
         }
-       
+
         static void ContaPoupanca()
-            {
+        {
             MostrarMenuClientePoupanca();
             Console.ReadLine();
         }
@@ -140,6 +170,4 @@ namespace SistemaBancario
 
     }
 
- }
-
-
+}
