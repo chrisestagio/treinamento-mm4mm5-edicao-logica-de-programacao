@@ -1,0 +1,72 @@
+using System;
+
+class Program
+{
+    static char[,] plateia = new char[5, 5];
+
+    static void Main(string[] args)
+    {
+        // Inicializa todos os assentos como livres (.)
+        for (int i = 0; i < 5; i++)
+            for (int j = 0; j < 5; j++)
+                plateia[i, j] = '.';
+
+        int opcao;
+        do
+        {
+            Console.WriteLine("\n--- CINEMA ---");
+            Console.WriteLine("1 - Procurar lugar livre");
+            Console.WriteLine("2 - Imprimir mapa");
+            Console.WriteLine("0 - Sair");
+            Console.Write("Escolha: ");
+            opcao = int.Parse(Console.ReadLine());
+
+            if (opcao == 1)
+                EncontrarLugarLivre();
+            else if (opcao == 2)
+                ImprimirMapa();
+
+        } while (opcao != 0);
+
+        Console.WriteLine("Encerrando o sistema...");
+    }
+
+    static void EncontrarLugarLivre()
+    {
+        for (int i = 0; i < plateia.GetLength(0); i++)
+        {
+            for (int j = 0; j < plateia.GetLength(1); j++)
+            {
+                if (plateia[i, j] == '.')
+                {
+                    Console.WriteLine($"Lugar livre: fila {i + 1}, assento {j + 1}");
+                    return;
+                }
+            }
+        }
+        Console.WriteLine("Não há lugares livres!");
+    }
+
+    static void ImprimirMapa()
+    {
+        int livres = 0, reservados = 0, comprados = 0;
+
+        Console.WriteLine("\nMapa da Plateia:\n");
+        for (int i = 0; i < plateia.GetLength(0); i++)
+        {
+            for (int j = 0; j < plateia.GetLength(1); j++)
+            {
+                Console.Write(plateia[i, j] + " ");
+
+                if (plateia[i, j] == '.') livres++;
+                else if (plateia[i, j] == 'R') reservados++;
+                else if (plateia[i, j] == 'C') comprados++;
+            }
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"\nLivres: {livres}");
+        Console.WriteLine($"Reservados: {reservados}");
+        Console.WriteLine($"Comprados: {comprados}");
+    }
+}
