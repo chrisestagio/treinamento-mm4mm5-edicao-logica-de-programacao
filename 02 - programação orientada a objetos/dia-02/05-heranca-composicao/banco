@@ -1,201 +1,106 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System;
 
-namespace ExHerança
-
+namespace SistemasdeEntregas
 {
-    public class App
+    class App
     {
         static void Main()
         {
-            List<ContaBase> contas = new List<ContaBase>();
+           
+        }
+    }
 
-            contas.Add(new ContaBase.ContaCorrente("Chris", "06"));
-            contas.Add(new ContaBase.Poupanca("Daphnie", "13"));
+    class Entrega
+    {
+        int numeroPedido;
+        double peso;
 
-            contas[0].Depositar(300);
-            contas[1].Depositar(200);
-
-            contas[0].Sacar(1000);
-            contas[1].Sacar(24);
-
-            for (int i = 0; i < contas.Count; i++)
-            {
-                contas[i].Resumo();
+         public Entrega() {}
+         public Entrega(int numeroPedido, double peso) {
+            this.numeroPedido = numeroPedido;
+            this.peso = peso;
             }
 
+        public virtual void CalcularFrete()
+        {
+         
+        }
+
+
+
+
+
+    }
+
+    class EntregaEconomica : Entrega
+    {
+        public EntregaEconomica(){}
+        public EntregaEconomica(int numeroPedido, double peso) {
+        
+            
+            CalcularFrete();
+
+            double total = peso * 5;
+
+            return;
 
         }
     }
 
+    class EntregaExpressa : Entrega
+    {
+        string origem;
+        string destino;
 
-    public class ContaBase
+        public EntregaExpressa() {}
+        public EntregaExpressa(string origem, string destino, int numeroPedido, double peso) {
+            this.origem = origem;
+            this.destino = destino;
 
+            CalcularFrete();
+            double totalExpressa = peso * 7;
+
+            if (origem != destino)
+            {
+                totalExpressa += 10;
+
+                return;
+            }
+            
+        }
+    } 
+
+    class EntregaInternacional : Entrega
     {
 
-        private string titular;
+        string origem;
+        string destino;
 
-        private string numeroConta;
-
-        protected decimal saldo;
-
-        public ContaBase(string titular, string numeroConta)
-
+        public EntregaInternacional() { }
+        public EntregaInternacional(string origem, string destino, int numeroPedido, double peso)
         {
+            this.origem = origem;
+            this.destino = destino;
 
-            this.titular = titular;
+            CalcularFrete();
 
-            this.numeroConta = numeroConta;
+            double totalInternacional = peso * 12;
 
-            this.saldo = 0;
+            if (origem && destino == EUA)
+            {
+                totalInternacional += 40;
+
+            } else if (origem != destino)
+            {
+                totalInternacional += 20;
+            }
+
+            return;
+
 
         }
 
-        public virtual void Transferir(ContaBase destino, decimal valor)
-        {
 
-        }
-
-        public virtual void Depositar(decimal valor)
-
-        {
-
-            if (valor > 0)
-
-            {
-
-                saldo += valor;
-
-            }
-
-            else
-
-            {
-
-                Console.WriteLine("Valor dado é menor do que zero! Operação não foi feita.");
-
-                return;
-
-            }
-
-        }
-
-        public virtual void Sacar(decimal valor)
-
-        {
-
-            if (valor > 0 && saldo >= valor)
-
-            {
-
-                saldo -= valor;
-
-            }
-
-            else
-
-            {
-
-                Console.WriteLine("Valor dado é menor do que zero! Operação não foi feita.");
-
-                return;
-
-            }
-
-        }
-
-        public virtual void Resumo()
-
-        {
-
-            Console.WriteLine($"Número da conta: {numeroConta}\nNome titular: {titular}\n Saldo: {saldo:F2}\n");
-
-        }
-
-        public class ContaCorrente : ContaBase
-
-        {
-
-            private const decimal tarifaSaque = 1;
-
-            public ContaCorrente(string titular, string numeroConta) : base(titular, numeroConta) { }
-
-            public override void Sacar(decimal valor)
-
-            {
-
-                if (valor > 0 && saldo >= valor + tarifaSaque)
-
-                {
-
-                    saldo -= valor + tarifaSaque;
-
-                }
-
-                else
-
-                {
-
-                    Console.WriteLine("Valor dado é menor do que zero! Operação não foi feita.");
-
-                    return;
-
-                }
-
-            }
-
-        }
-
-        public class Poupanca : ContaBase
-
-        {
-
-            private const decimal taxaRendimentoAnual = 0.08m;
-
-            public Poupanca(string titular, string numeroConta) : base(titular, numeroConta) { }
-
-            private void RenderJuros(int dias)
-
-            {
-
-                decimal rendimento = saldo * (taxaRendimentoAnual * dias / 365);
-
-                base.Depositar(rendimento);
-
-            }
-
-        }
-
-        public class ContaConjunta : ContaCorrente
-
-        {
-
-            private string segundoTitular;
-
-            public ContaConjunta(string titular, string numeroConta, string segundoTitular) : base(titular, numeroConta)
-
-            {
-
-                this.segundoTitular = segundoTitular;
-
-            }
-
-            public override void Resumo()
-
-            {
-
-                Console.WriteLine($"Número da conta: {numeroConta}\nNome titular: {titular}\nNome segundo titular: {segundoTitular}\n {saldo:F2}\n");
-
-            }
-
-        }
 
     }
-
 }
-
-
-
